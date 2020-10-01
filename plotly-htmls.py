@@ -275,7 +275,7 @@ fig = du.visualization.shap_summary_plot(shap_values, feature_names,
                                          output_type='plotly',
                                          font_family=font, font_size=font_size,
                                          font_color=font_color,
-                                         xaxis_title='mean(|SHAP value|) (average impact on model output magnitude)')
+                                         xaxis_title='mean(|SHAP value|)')
 fig
 
 pio.write_html(fig, file='GitHub/test-plotly-html/thesis_feat_import_bidir_lstm_delta_t.html', auto_open=True)
@@ -318,7 +318,7 @@ fig = du.visualization.shap_summary_plot(shap_values, feature_names,
                                          output_type='plotly',
                                          font_family=font, font_size=font_size,
                                          font_color=font_color,
-                                         xaxis_title='mean(|SHAP value|) (average impact on model output magnitude)')
+                                         xaxis_title='mean(|SHAP value|)')
 fig
 
 pio.write_html(fig, file='GitHub/test-plotly-html/thesis_feat_import_xgb.html', auto_open=True)
