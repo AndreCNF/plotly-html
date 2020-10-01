@@ -8,6 +8,7 @@
 import os                                  # os handles directory/workspace changes
 import yaml                                # Save and load YAML files
 import pandas as pd                        # Pandas to load and handle the data
+import data_utils as du                    # Generic data science and machine learning tools
 import plotly.graph_objects as go          # Plotly for interactive and pretty plots
 import plotly.io as pio                    # Save Plotly graphs
 
@@ -234,6 +235,92 @@ figure=dict(
 fig = go.Figure(figure)
 fig
 
-pio.write_html(fig, file='thesis_component_impact.html', auto_open=True)
+pio.write_html(fig, file='GitHub/test-plotly-html/thesis_component_impact.html', auto_open=True)
+
+# ### Thesis bidir LSTM time aware feature importance
+
+# #### Data
+
+# Change to parent directory (presumably "Documents")
+os.chdir("../..")
+
+data_path = 'GitHub/hai-dash/data/ALS/'
+data_file_name = 'fcul_als_with_shap_for_lstm_bidir_one_hot_encoded_delta_ts_90dayswindow_0.3784valloss_08_07_2020_04_14'
+
+df = pd.read_csv(f'{data_path}{data_file_name}.csv')
+df.head()
+
+# Get the SHAP values into a NumPy array and the feature names
+shap_column_names = [feature for feature in df.columns
+                     if feature.endswith('_shap')]
+feature_names = [feature.split('_shap')[0] for feature in shap_column_names]
+shap_values = df[shap_column_names].to_numpy()
+
+# #### Plot configuration
+
+font = 'Roboto'
+font_size = 20
+font_color = 'white'
+background_color = '#8f8e2f'
+marker_color = 'white'
+max_display = 10
+
+# #### Plot
+
+# Generate the SHAP summary plot
+fig = du.visualization.shap_summary_plot(shap_values, feature_names,
+                                         max_display=max_display,
+                                         background_color=background_color,
+                                         marker_color=marker_color,
+                                         output_type='plotly',
+                                         font_family=font, font_size=font_size,
+                                         font_color=font_color,
+                                         xaxis_title='mean(|SHAP value|) (average impact on model output magnitude)')
+fig
+
+pio.write_html(fig, file='GitHub/test-plotly-html/thesis_feat_import_bidir_lstm_delta_t.html', auto_open=True)
+
+# ### Thesis XGBoost feature importance
+
+# #### Data
+
+# Change to parent directory (presumably "Documents")
+os.chdir("../..")
+
+data_path = 'Datasets/Thesis/FCUL_ALS/interpreted/'
+data_file_name = 'fcul_als_with_shap_for_xgb_0.5926valloss_09_07_2020_02_40'
+
+df = pd.read_csv(f'{data_path}{data_file_name}.csv')
+df.head()
+
+# Get the SHAP values into a NumPy array and the feature names
+shap_column_names = [feature for feature in df.columns
+                     if feature.endswith('_shap')]
+feature_names = [feature.split('_shap')[0] for feature in shap_column_names]
+shap_values = df[shap_column_names].to_numpy()
+
+# #### Plot configuration
+
+font = 'Roboto'
+font_size = 20
+font_color = 'white'
+background_color = '#8f8e2f'
+marker_color = 'white'
+max_display = 10
+
+# #### Plot
+
+# Generate the SHAP summary plot
+fig = du.visualization.shap_summary_plot(shap_values, feature_names,
+                                         max_display=max_display,
+                                         background_color=background_color,
+                                         marker_color=marker_color,
+                                         output_type='plotly',
+                                         font_family=font, font_size=font_size,
+                                         font_color=font_color,
+                                         xaxis_title='mean(|SHAP value|) (average impact on model output magnitude)')
+fig
+
+pio.write_html(fig, file='GitHub/test-plotly-html/thesis_feat_import_xgb.html', auto_open=True)
 
 
