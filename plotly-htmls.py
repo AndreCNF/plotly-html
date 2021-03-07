@@ -8,9 +8,11 @@
 import os                                  # os handles directory/workspace changes
 import yaml                                # Save and load YAML files
 import pandas as pd                        # Pandas to load and handle the data
-import data_utils as du                    # Generic data science and machine learning tools
+# import data_utils as du                    # Generic data science and machine learning tools
 import plotly.graph_objects as go          # Plotly for interactive and pretty plots
 import plotly.io as pio                    # Save Plotly graphs
+import plotly.express as px
+import pycountry
 
 # ## Plotting
 
@@ -322,5 +324,41 @@ fig = du.visualization.shap_summary_plot(shap_values, feature_names,
 fig
 
 pio.write_html(fig, file='GitHub/test-plotly-html/thesis_feat_import_xgb.html', auto_open=True)
+
+# ### Countries visited
+#
+# For my [personal page](https://andrecnf.com/).
+
+# #### Data
+
+visited_countries = ['Portugal', 'Spain', 'France', 'Germany', 'Netherlands', 
+                     'United Kingdom', 'Croatia', 'Bosnia and Herzegovina', 'Italy', 'Slovenia',
+                     'Colombia', 'Peru', 'Chile', 'Argentina', 'Brazil', 
+                     'United States', 'Costa Rica', 'China', 'Hong Kong',
+                     'Macao']
+
+for country in visited_countries:
+    try:
+        pycountry.countries.get(name=country).alpha_3
+    except:
+        print(f'Failed to encode {country}')
+
+country_codes = [pycountry.countries.get(name=country).alpha_3 for country in visited_countries]
+country_codes
+
+# #### Plot
+
+fig = px.choropleth(locations=country_codes)
+fig.update_layout(dict(
+    plot_bgcolor='rgba(0, 0, 0, 0)',
+    paper_bgcolor='rgba(0, 0, 0, 0)',
+    showlegend=False,
+    margin=dict(l=0, r=0, t=0, b=0)
+))
+
+# Change to parent directory (presumably "Documents")
+os.chdir("../..")
+
+pio.write_html(fig, file='GitHub/test-plotly-html/countries_visited.html', auto_open=True)
 
 
